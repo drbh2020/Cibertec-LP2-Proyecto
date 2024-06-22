@@ -32,7 +32,7 @@ public class UsuarioEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_usuario")
-	private Long usuarioId;
+	private Integer usuarioId;
 	
 	@Column(name = "nombre", length = 45, nullable = false)
 	private String nombre;
@@ -46,7 +46,7 @@ public class UsuarioEntity {
 	@Column(name = "password", length = 45, nullable = false)
 	private String password;
 	
-	@Column(name = "estado", nullable = false)
+	@Column(name = "estado", nullable = false, columnDefinition = "bit(1) default 1")
 	private Boolean estado;
 	
 	@ManyToOne

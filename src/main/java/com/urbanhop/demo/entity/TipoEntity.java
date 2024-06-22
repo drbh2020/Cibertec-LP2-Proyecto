@@ -24,8 +24,8 @@ public class TipoEntity {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_tipo")
-    private Long tipoId;
+    private Integer tipoId;
 
-    @Column(name = "nombre", length = 45, nullable = false)
+    @Column(name = "nombre", length = 45, nullable = false, unique = true, columnDefinition = "varchar(45) default 'cliente'")
     private String nombre;
 }

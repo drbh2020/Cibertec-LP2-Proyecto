@@ -29,7 +29,7 @@ public class ProductoEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_producto")
-	private Long productoId;
+	private Integer productoId;
 	
 	@Column(name = "nombre", length = 45, nullable = false)
 	private String nombre;
