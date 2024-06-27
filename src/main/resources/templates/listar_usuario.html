@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD con Thymeleaf y Bootstrap</title>
+    <!-- Estilos de Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Lista usuario</h2>
+
+		<a th:href="@{/registrar_usuario}" class="btn btn-primary">Registrar</a>
+        <!-- Tabla de usuarios -->
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Correo</th>
+                    <th>Nombres</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${listaUsuario}">
+                    <td th:text="${user.usuarioId}"></td>
+                    <td th:text="${user.correo}"></td>
+                    <td th:text="${user.nombre}"></td>
+                    <td>
+                    <a th:href="@{/detalle_usuario/{id}(id=${user.usuarioId})}" class="btn btn-info">Ver</a> |
+                    <a th:href="@{/editar_usuario/{id}(id=${user.usuarioId})}" class="btn btn-warning">Editar</a>  
+                        
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Scripts de Bootstrap y jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
