@@ -1,5 +1,6 @@
 package com.urbanhop.demo.entity;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,19 +14,18 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "tb_categoria")
+@Table(name = "tb_talla")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class CategoriaEntity {
-
+public class TallaEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_categoria")
-	private Long categoriaId;
-	@Column(name = "nombre_categoria", length = 45, nullable = false)
+	@Column(name = "id_talla")
+	private Integer tallaId;
+	
+	@Column(name = "nombre", columnDefinition = "VARCHAR(3)")
 	private String nombre;
-		
 }
