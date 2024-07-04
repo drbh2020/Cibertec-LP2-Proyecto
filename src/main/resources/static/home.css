@@ -1,0 +1,14 @@
+.icon-hover:hover {
+    border-color: #3b71ca !important;
+    background-color: black !important;
+}
+
+.icon-hover:hover i {
+    color: #3b71ca !important;
+}
+body{
+    background-color: black;
+}
+.d-block{
+    height: 10px;
+}
