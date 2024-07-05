@@ -21,6 +21,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class TipoEntity {
+	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_tipo")
