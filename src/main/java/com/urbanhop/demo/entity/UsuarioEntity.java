@@ -1,6 +1,6 @@
 package com.urbanhop.demo.entity;
 
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumn; 
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
