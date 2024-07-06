@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Usuario</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h2>Editar Usuario</h2>
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+        <span th:text="${errorMessage}"></span>
+    </div>
+    <form th:action="@{/editar_usuario/{id}(id=${usuario.correo})}" th:object="${usuario}" method="post">
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" class="form-control" id="nombre" th:field="*{nombre}" placeholder="Ingrese su nombre">
+        </div>
+        <div class="form-group">
+            <label for="apellido">Apellido:</label>
+            <input type="text" class="form-control" id="apellido" th:field="*{apellido}" placeholder="Ingrese su apellido">
+        </div>
+        <div class="form-group">
+            <label for="correo">Correo electrónico:</label>
+            <input disabled type="email" class="form-control" id="correo" th:field="*{correo}" th:value="*{correo}" placeholder="Ingrese su correo electrónico">
+        </div>
+        <div class="form-group">
+            <label for="password">Nueva Contraseña (dejar en blanco para mantener la actual):</label>
+            <input type="text" class="form-control" id="password" th:field="*{password}" placeholder="Ingrese su contraseña">
+        </div>
+        <div class="form-group">
+            <label for="tipo">Tipo de Usuario</label>
+            <select class="form-control" id="tipo" th:field="*{tipo}" required>
+                <option th:each="tipo : ${tiposUsuario}" th:value="${tipo.tipoId}" th:text="${tipo.nombre}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="estado">Estado:</label>
+            <select class="form-control" id="estado" th:field="*{estado}">
+                <option value="true">Activo</option>
+                <option value="false">Inactivo</option>
+            </select>
+        </div>
+        <a th:href="@{/listar_usuario}" class="btn btn-secondary">Cancelar</a>
+        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+    </form>
+</div>
+</body>
+</html>

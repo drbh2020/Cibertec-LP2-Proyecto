@@ -13,7 +13,7 @@
     <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
         <span th:text="${errorMessage}"></span>
     </div>
-    <form th:action="@{/registrar_usuario}" th:object="${user}" method="post">
+    <form th:action="@{/registrar_usuario}" th:object="${usuario}" method="post">
         <div class="form-group">
             <label for="nombre">Nombre:</label>
             <input type="text" class="form-control" id="nombre" th:field="*{nombre}" placeholder="Ingrese su nombre" required>
@@ -30,7 +30,13 @@
             <label for="password">Contraseña:</label>
             <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="Ingrese su contraseña" required>
         </div>
-        <a th:href="@{/}" class="btn btn-secondary">Regresar</a>
+        <div class="form-group">
+            <label for="tipo">Tipo de Usuario</label>
+            <select class="form-control" id="tipo" th:field="*{tipo}" required>
+                <option th:each="tipo : ${tiposUsuario}" th:value="${tipo.tipoId}" th:text="${tipo.nombre}"></option>
+            </select>
+        </div>
+        <a th:href="@{/listar_usuario}" class="btn btn-secondary">Regresar</a>
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
 </div>

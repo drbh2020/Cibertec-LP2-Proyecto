@@ -6,7 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.urbanhop.demo.entity.UsuarioEntity;
 
 @Repository
-public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer>{
-	UsuarioEntity findByCorreo(String correo);
-	UsuarioEntity findByCorreoAndPassword(String correo, String password);
+public interface UsuarioRepository extends JpaRepository<UsuarioEntity, String>{
 }
