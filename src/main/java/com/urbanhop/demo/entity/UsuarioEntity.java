@@ -30,21 +30,17 @@ import lombok.ToString;
 public class UsuarioEntity {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_usuario")
-	private Integer usuarioId;
+	@Column(name = "correo", length = 45, nullable = false)
+	private String correo;
+
+	@Column(name = "password", length = 255, nullable = false)
+	private String password;
 	
 	@Column(name = "nombre", length = 45, nullable = false)
 	private String nombre;
 	
 	@Column(name = "apellido", length = 45, nullable = false)
 	private String apellido;
-	
-	@Column(name = "correo", length = 45, nullable = false, unique = true)
-	private String correo;
-	
-	@Column(name = "password", length = 45, nullable = false)
-	private String password;
 	
 	@Column(name = "estado", nullable = false, columnDefinition = "bit(1) default 1")
 	private Boolean estado;
