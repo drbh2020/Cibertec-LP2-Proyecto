@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD con Thymeleaf y Bootstrap</title>
+    <link rel="stylesheet" src="../static/home.css">
+    <!-- Estilos de Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+		crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+		<!-- Jumbotron -->
+		<div th:replace="vistas-parciales/jumbotron :: jumbotron-content"></div>
+		<!-- Jumbotron -->
+
+		<!-- Navbar -->
+		<nav th:replace="vistas-parciales/navbar :: navbar-content"></nav>
+		<!-- Navbar -->
+        <h2>Lista usuario</h2>
+
+		<a th:href="@{/registrar_usuario}" class="btn btn-primary">Registrar</a>
+        <!-- Tabla de usuarios -->
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th>Correo</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Tipo</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${listaUsuario}">
+                    <td th:text="${user.correo}"></td>
+                    <td th:text="${user.nombre}"></td>
+                    <td th:text="${user.apellido}"></td>
+                    <td th:text="${user.tipo.nombre}"></td>
+                    <td>
+                    <a th:href="@{/detalle_usuario/{id}(id=${user.correo})}" class="btn btn-info">Ver</a> |
+                    <a th:href="@{/editar_usuario/{id}(id=${user.correo})}" class="btn btn-warning">Editar</a>  
+                        
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Scripts de Bootstrap y jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

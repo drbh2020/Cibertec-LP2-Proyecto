@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home</title>
+
+<link rel="stylesheet" href="/home.css">
+
+<!-- Estilos de Bootstrap -->
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+	integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK"
+	crossorigin="anonymous"></script>
+
+
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+	crossorigin="anonymous">
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+	crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+	<!--Main Navigation-->
+	<header>
+		<!-- Jumbotron -->
+		<div th:replace="vistas-parciales/jumbotron :: jumbotron-content"></div>
+		<!-- Jumbotron -->
+
+		<!-- Navbar -->
+		<nav th:replace="vistas-parciales/navbar :: navbar-content"></nav>
+		<!-- Navbar -->
+		<!-- Carousel -->
+		<div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+			<div class="carousel-inner">
+				<div class="carousel-item active">
+					<img src="../static/img/banner01.jpg" class="d-block w-100" alt="...">
+				</div>
+				<div class="carousel-item">
+					<img src="../static/img/banner02.jpg" class="d-block w-100" alt="...">
+				</div>
+				<div class="carousel-item">
+					<img src="../static/img/banner03.jpg" class="d-block w-100" alt="...">
+				</div>
+			</div>
+		</div>
+		<!-- Carousel -->
+	</header>
+	<!-- Products -->
+	<section>
+		<div class="container my-5">
+			<header class="mb-4">
+				<h3>Nuestros Productos</h3>
+			</header>
+
+			<div class="container">
+				<div class="row mt-5">
+					<div class="col-4 mb-4" th:each="producto: ${productos}">
+						<div class="card" style="width: 18rem;">
+							<img width="100%" height="100%" th:src="${producto.urlImagen}"
+								class="card-img-top" alt="Product Image">
+							<div class="card-body">
+								<form th:action="@{/agregar_producto}" th:object="${pedido}"
+									method="post">
+									<h5 class="card-title" th:text="${producto.nombre}"></h5>
+									<p class="card-text">
+										<strong>Precio:</strong> S/<span th:text="${producto.precio}"></span><br>
+										<strong>Cantidad:</strong> <span th:text="${producto.stock}"></span>
+										unidades
+									</p>
+									<input required name="cant" placeholder="Ingrese cantidad"
+										class="form-control mb-3" type="number"> <input
+										name="prodId" type="hidden" th:value="${producto.productoId}">
+									<button type="submit" class="btn btn-primary">Agregar
+										+</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Products -->
+	<div class="bg-black">
+		<!-- Feature -->
+		<section class="mt-5" style="background-color:black;">
+			<div class="container text-white pt-3">
+				<header class="pt-4 pb-3">
+					<h3>¿Por qué elegirnos?</h3>
+				</header>
+
+				<div class="row mb-4">
+					<div class="col-lg-4 col-md-6">
+						<figure class="d-flex align-items-center mb-4">
+							<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor"
+								class="bi bi-bag-check-fill" viewBox="0 0 16 16">
+								<path fill-rule="evenodd"
+									d="M10.5 3.5a2.5 2.5 0 0 0-5 0V4h5zm1 0V4H15v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4h3.5v-.5a3.5 3.5 0 1 1 7 0m-.646 5.354a.5.5 0 0 0-.708-.708L7.5 10.793 6.354 9.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0z" />
+							</svg>
+							<i class="fas fa-user-alt m-1 me-md-2"></i>
+							<figcaption class="info">
+								<h6 class="title">COMPRA SEGURA</h6>
+								<p>Compra online y retira en tienda</p>
+							</figcaption>
+						</figure>
+						<!-- itemside // -->
+					</div>
+					<!-- col // -->
+					<div class="col-lg-4 col-md-6">
+						<figure class="d-flex align-items-center mb-4">
+							<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor"
+								class="bi bi-shop" viewBox="0 0 16 16">
+								<path
+									d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.37 2.37 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0M1.5 8.5A.5.5 0 0 1 2 9v6h1v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5h6V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5M4 15h3v-5H4zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zm3 0h-2v3h2z" />
+							</svg>
+							<i class="fas fa-user-alt m-1 me-md-2"></i>
+							<figcaption class="info">
+								<h6 class="title">RETIRA EN TIENDA</h6>
+								<p>En mas de 50 tiendas a nivel nacional</p>
+							</figcaption>
+						</figure>
+						<!-- itemside // -->
+					</div>
+					<!-- col // -->
+					<div class="col-lg-4 col-md-6">
+						<figure class="d-flex align-items-center mb-4">
+							<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor"
+								class="bi bi-bus-front" viewBox="0 0 16 16">
+								<path
+									d="M5 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0m8 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m-6-1a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2zm1-6c-1.876 0-3.426.109-4.552.226A.5.5 0 0 0 3 4.723v3.554a.5.5 0 0 0 .448.497C4.574 8.891 6.124 9 8 9s3.426-.109 4.552-.226A.5.5 0 0 0 13 8.277V4.723a.5.5 0 0 0-.448-.497A44 44 0 0 0 8 4m0-1c-1.837 0-3.353.107-4.448.22a.5.5 0 1 1-.104-.994A44 44 0 0 1 8 2c1.876 0 3.426.109 4.552.226a.5.5 0 1 1-.104.994A43 43 0 0 0 8 3" />
+								<path
+									d="M15 8a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1V2.64c0-1.188-.845-2.232-2.064-2.372A44 44 0 0 0 8 0C5.9 0 4.208.136 3.064.268 1.845.408 1 1.452 1 2.64V4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1v3.5c0 .818.393 1.544 1 2v2a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5V14h6v1.5a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-2c.607-.456 1-1.182 1-2zM8 1c2.056 0 3.71.134 4.822.261.676.078 1.178.66 1.178 1.379v8.86a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 11.5V2.64c0-.72.502-1.301 1.178-1.379A43 43 0 0 1 8 1" />
+							</svg>
+							<i class="fas fa-user-alt m-1 me-md-2"></i>
+							<figcaption class="info">
+								<h6 class="title">SIGUE TU PEDIDO</h6>
+								<p>Fácil y rápido solo con tu N° de pedido</p>
+							</figcaption>
+						</figure>
+						<!-- itemside // -->
+					</div>
+					<!-- col // -->
+					<div class="col-lg-4 col-md-6">
+						<figure class="d-flex align-items-center mb-4">
+							<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor"
+								class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+								<path fill-rule="evenodd"
+									d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z" />
+								<path
+									d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
+							</svg>
+							<i class="fas fa-user-alt m-1 me-md-2"></i>
+							<figcaption class="info">
+								<h6 class="title">CAMBIOS Y DEVOLUCIONES</h6>
+								<p>En mas de 50 tiendas a nivel nacional</p>
+							</figcaption>
+						</figure>
+						<!-- itemside // -->
+					</div>
+					<!-- col // -->
+					<div class="col-lg-4 col-md-6">
+						<figure class="d-flex align-items-center mb-4">
+							<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor"
+								class="bi bi-person-lines-fill" viewBox="0 0 16 16">
+								<path
+									d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z" />
+							</svg>
+							<i class="fas fa-user-alt m-1 me-md-2"></i>
+							<figcaption class="info">
+								<h6 class="title">ATENCIÓN AL CLIENTE</h6>
+								<p>Escríbenos a nuestro correo</p>
+							</figcaption>
+						</figure>
+						<!-- itemside // -->
+					</div>
+					<!-- col // -->
+					<div class="col-lg-4 col-md-6">
+						<figure class="d-flex align-items-center mb-4">
+							<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor"
+								class="bi bi-file-earmark-lock" viewBox="0 0 16 16">
+								<path
+									d="M10 7v1.076c.54.166 1 .597 1 1.224v2.4c0 .816-.781 1.3-1.5 1.3h-3c-.719 0-1.5-.484-1.5-1.3V9.3c0-.627.46-1.058 1-1.224V7a2 2 0 1 1 4 0M7 7v1h2V7a1 1 0 0 0-2 0M6 9.3v2.4c0 .042.02.107.105.175A.64.64 0 0 0 6.5 12h3a.64.64 0 0 0 .395-.125c.085-.068.105-.133.105-.175V9.3c0-.042-.02-.107-.105-.175A.64.64 0 0 0 9.5 9h-3a.64.64 0 0 0-.395.125C6.02 9.193 6 9.258 6 9.3" />
+								<path
+									d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
+							</svg>
+							<i class="fas fa-user-alt m-1 me-md-2"></i>
+							<figcaption class="info">
+								<h6 class="title">PAGO SEGURO</h6>
+								<p>Utilizamos seguridad SSL encriptada</p>
+							</figcaption>
+						</figure>
+						<!-- itemside // -->
+					</div>
+					<!-- col // -->
+				</div>
+			</div>
+			<!-- container end.// -->
+		</section>
+		<!-- Feature -->
+		<div class="">
+			<div class="container">
+				<div class="d-flex justify-content-between py-4 border-top">
+					<!-- payment -->
+					<div>
+						<i class="fab fa-lg fa-cc-visa text-dark"></i>
+						<i class="fab fa-lg fa-cc-amex text-dark"></i>
+						<i class="fab fa-lg fa-cc-mastercard text-dark"></i>
+						<i class="fab fa-lg fa-cc-paypal text-dark"></i>
+					</div>
+					<!-- payment -->
+				</div>
+			</div>
+		</div>
+		<!-- Footer -->
+		<footer th:replace="vistas-parciales/footer :: footer-content"></footer>
+		<!-- Footer -->
+	</div>
+</body>
+
+</html>

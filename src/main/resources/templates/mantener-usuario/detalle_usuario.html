@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del usuario</title>
+    <!-- Estilos de Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Detalles del usuario</h2>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title" th:text="'Nombre: ' + ${usuario.nombre}">No existe</h5>
+                <p class="card-text" th:text="'Correo electrónico: '+ ${usuario.correo}"></p>
+                <p class="card-text" th:text="'Apellido: ' + ${usuario.apellido}"></p>
+                <p class="card-text" th:text="'Tipo: ' + ${usuario.tipo.nombre}"></p>
+                
+                <a th:href="@{/listar_usuario}" class="btn btn-primary">Regresar</a>
+                <a th:href="@{/eliminar_usuario/{id}(id=${usuario.correo})}" class="btn btn-danger">Eliminar</a>
+            </div>
+        </div>
+    </div>
+    
+    
+
+    <!-- Scripts de Bootstrap y jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+</body>
+</html>
