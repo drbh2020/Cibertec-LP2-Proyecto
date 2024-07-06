@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.urbanhop.demo.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import lombok.ToString;
 @ToString
 public class Pedido {
 	private Integer cantidad;
-	private Long productoId;
+	private Integer productoId;
 
 
 }

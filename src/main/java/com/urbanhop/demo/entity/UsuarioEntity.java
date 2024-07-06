@@ -40,7 +40,7 @@ public class UsuarioEntity {
 	private String nombre;
 	
 	@Column(name = "apellido", length = 45, nullable = false)
-	private String apellido;
+	private String apellido; // apellidos en el otro
 	
 	@Column(name = "estado", nullable = false, columnDefinition = "bit(1) default 1")
 	private Boolean estado;
@@ -48,12 +48,5 @@ public class UsuarioEntity {
 	@ManyToOne
 	@JoinColumn(name = "tipo_id_tipo", nullable = false)
 	private TipoEntity tipo;
-	
-	@ManyToMany
-	@JoinTable(
-		name = "tb_lista_deseos", 
-		joinColumns = @JoinColumn(name = "usuario_id_usuario"),
-		inverseJoinColumns = @JoinColumn(name = "producto_id_producto" )
-	)
-	private List<ProductoEntity> listaDeseos = new ArrayList<>();
+
 }

@@ -26,11 +26,7 @@ public class UsuarioController {
 	@Autowired
     private TipoRepository tipoRepository;
 	
-	@GetMapping("/")
-	public String home() {
-		return "home";
-	}
-	
+
 	
 	@GetMapping("/login")
 	public String showLogin(Model model) {

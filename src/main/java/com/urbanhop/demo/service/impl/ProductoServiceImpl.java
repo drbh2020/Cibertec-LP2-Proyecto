@@ -49,5 +49,21 @@ public class ProductoServiceImpl  implements ProductoService{
 		return productoRepository.findByProductoId(productoId);
 	}
 
+	@Override
+	public List<ProductoEntity> buscarTodosProductos() {
+		return productoRepository.findAll();
+	}
+
+	@Override
+	public ProductoEntity buscarProductoPorId(Integer id) { // (antes LONG)
+		return productoRepository.findById(id).get();
+	}
+
+	@Override
+	public void save(ProductoEntity producto) {
+		productoRepository.save(producto);
+		
+	}
+
 	
 }

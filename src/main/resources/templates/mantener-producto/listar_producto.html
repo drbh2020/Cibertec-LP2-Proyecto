@@ -10,6 +10,7 @@
 </head>
 <body class="bg-dark text-light">
     <div class="container">
+		<div th:replace="vistas-parciales/jumbotron :: jumbotron-content"></div>
         <h2>Lista Productos</h2>
 
         <a th:href="@{/registrar_producto}" class="btn btn-primary">Agregar</a>

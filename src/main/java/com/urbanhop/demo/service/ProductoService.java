@@ -10,5 +10,9 @@ public interface ProductoService {
 	void actualizarProducto(ProductoEntity productoEntity);
 	
 	List<ProductoEntity> lstProductos();
-	ProductoEntity findByProductoId(Integer productoId);	
+	ProductoEntity findByProductoId(Integer productoId);
+	
+	List<ProductoEntity> buscarTodosProductos();
+	ProductoEntity buscarProductoPorId(Integer id);
+	void save(ProductoEntity producto); 
 }

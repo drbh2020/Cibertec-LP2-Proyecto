@@ -52,6 +52,5 @@ public class ProductoEntity {
 	@JoinColumn(name = "id_categoria", nullable = false)
 	private CategoriaEntity categoriaEntity;
 	
-	@ManyToMany(mappedBy = "listaDeseos")
-	private List<UsuarioEntity> usuarios = new ArrayList<>();
+	private String urlImagen;
 }

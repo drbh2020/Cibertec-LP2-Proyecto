@@ -104,8 +104,8 @@
 										<!-- Iterar sobre las categorías -->
 										<th:block th:each="categoria : ${categorias}">
 											<li><a class="dropdown-item"
-												th:href="@{'/categoria/' + ${categoria.categoria_id}}"
-												th:text="${categoria.nombre_categoria}"></a></li>
+												th:href="@{'/categoria/' + ${categoria.categoriaId}}"
+												th:text="${categoria.nombre}"></a></li>
 										</th:block>
 									</ul>
 								</li>
