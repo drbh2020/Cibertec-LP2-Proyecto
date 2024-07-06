@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.urbanhop.demo.entity.TipoEntity;
 import com.urbanhop.demo.entity.UsuarioEntity;
 import com.urbanhop.demo.repository.TipoRepository;
-import com.urbanhop.demo.repository.UsuarioRepository;
+import com.urbanhop.demo.service.UsuarioService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -21,7 +21,7 @@ import jakarta.servlet.http.HttpSession;
 public class UsuarioController {
 	
 	@Autowired
-	private UsuarioRepository usuarioRepository;
+	private UsuarioService usuarioService;
 	
 	@Autowired
     private TipoRepository tipoRepository;
@@ -35,38 +35,52 @@ public class UsuarioController {
 	@GetMapping("/login")
 	public String showLogin(Model model) {
 		model.addAttribute("usuario", new UsuarioEntity());
-		return "login";
+		String rutaVista = "/login/login";
+		return rutaVista;
 	}
 	
 	@PostMapping("/login")
-	public String login(@ModelAttribute UsuarioEntity usuario, Model model, HttpSession session ) {
-		UsuarioEntity usuarioEncontradoEntity = usuarioRepository.findByCorreoAndPassword(usuario.getCorreo(), usuario.getPassword());
+	public String login(UsuarioEntity usuario, Model model, HttpSession session ) {
+		boolean usuarioValidado = usuarioService.validarUsuario(usuario, session);
 		
-		if (usuarioEncontradoEntity != null) {
-			session.setAttribute("usuario", usuarioEncontradoEntity.getCorreo());
-			return "redirect:/menu";
-		} else {
-			model.addAttribute("loginIncorrecto", "Este usuario no existe");
-			model.addAttribute("usuario", new UsuarioEntity());
-			return "login";
+		if (usuarioValidado) {
+			return "redirect:/";
 		}
 		
+		model.addAttribute("loginIncorrecto", "Este usuario no existe");
+		model.addAttribute("usuario", new UsuarioEntity());
+		String rutaVista = "/login/login";
+		return rutaVista;
 	}
 	
-	@GetMapping("/menu")
-	public String showMenu(Model model, HttpSession session) {
+	// Registrar
+	@GetMapping("/registrate")
+	public String showRegistrate(Model model) {
+		model.addAttribute("usuario", new UsuarioEntity());
+		String rutaVista = "/login/registrate";
+		return rutaVista;
+	}
+	
+	@PostMapping("/registrate")
+	public String registrate(@ModelAttribute UsuarioEntity usuario, Model model ) {
 		
-		String correoString = (String) session.getAttribute("usuario");
+		String rutaVista = "/login/registrate";
 		
-		if(correoString == null) {
-			return "return:/login";
+		if(usuarioService.buscarUsuarioPorCorreo(usuario.getCorreo()) != null) {
+			model.addAttribute("errorMessage", "El correo electrónico ya está en uso");
+			model.addAttribute("usuario", new UsuarioEntity());
+			return rutaVista;
 		}
 		
-		model.addAttribute("correo", session.getAttribute("usuario"));
+		usuario.setTipo(tipoRepository.findByNombre("cliente"));
+		usuario.setEstado(true);
 		
-		return "menu";
+		usuarioService.crearUsuario(usuario, model);
 		
+		return "redirect:/login";
 	}
+	
+
 	
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
@@ -78,76 +92,107 @@ public class UsuarioController {
 	// Listar
 	@GetMapping("/listar_usuario")
 	public String showListarUsuarios(Model model) {
-		List<UsuarioEntity> listaUsuario = usuarioRepository.findAll();
+		List<UsuarioEntity> listaUsuario = usuarioService.listarUsuario();
+		String rutaVista = "/mantener-usuario/listar_usuario";
+		
 		model.addAttribute("listaUsuario", listaUsuario);
-		return "listar_usuario";
+		return rutaVista;
 	}
 	
 	// Registrar
 	@GetMapping("/registrar_usuario")
 	public String showRegistrarUsuario(Model model) {
-		model.addAttribute("user", new UsuarioEntity());
-		return "registrar_usuario";
+		List<TipoEntity> listaTipo = tipoRepository.findAll();
+		model.addAttribute("usuario", new UsuarioEntity());
+		model.addAttribute("tiposUsuario", listaTipo);
+		String rutaVista = "/mantener-usuario/registrar_usuario";
+		return rutaVista;
 	}
 	
 	@PostMapping("/registrar_usuario")
 	public String registrarUsuario(@ModelAttribute UsuarioEntity usuario, Model model ) {
+		List<TipoEntity> listaTipo = tipoRepository.findAll();
+		String rutaVista = "/mantener-usuario/registrar_usuario";
 		
-		if(usuarioRepository.findByCorreo(usuario.getCorreo()) != null) {
+		if(usuarioService.buscarUsuarioPorCorreo(usuario.getCorreo()) != null) {
 			model.addAttribute("errorMessage", "El correo electrónico ya está en uso");
-			model.addAttribute("user", new UsuarioEntity());
-			return "registrar_usuario";
+			model.addAttribute("usuario", new UsuarioEntity());
+	        model.addAttribute("tiposUsuario", listaTipo);
+			return rutaVista;
 		}
 		
-		usuario.setTipo(tipoRepository.findByNombre("cliente"));
+	    
+	    if (usuario.getNombre() == null || usuario.getNombre().isEmpty()) {
+	        model.addAttribute("errorMessage", "El nombre y la contraseña no pueden estar vacíos");
+	        model.addAttribute("usuario", new UsuarioEntity());
+	        model.addAttribute("tiposUsuario", listaTipo);
+	        return rutaVista;
+	    }
+		
 		usuario.setEstado(true);
 		
-		usuarioRepository.save(usuario);
+		usuarioService.crearUsuario(usuario, model);
 		
-		return "redirect:/";
+		return "redirect:/listar_usuario";
 	}
 	
 	// Detalle
 	@GetMapping("/detalle_usuario/{id}")
-	public String verUsuario(Model model, @PathVariable("id") Integer id) {
-		UsuarioEntity usuarioEncontrado= usuarioRepository.findById(id).get();
-		model.addAttribute("user", usuarioEncontrado);
-		return "detalle_usuario";
+	public String verUsuario(Model model, @PathVariable("id") String correo) {
+		UsuarioEntity usuarioEncontrado= usuarioService.buscarUsuarioPorCorreo(correo);
+		
+		model.addAttribute("usuario", usuarioEncontrado);
+		
+		String rutaVista = "/mantener-usuario/detalle_usuario";
+		return rutaVista;
 	}
 	
 	// Eliminar
-	@GetMapping("/delete/{id}")
-	public String eliminarUsuario( @PathVariable("id") Integer id) {
-		usuarioRepository.deleteById(id);
-		return "redirect:/";
+	@GetMapping("/eliminar_usuario/{id}")
+	public String eliminarUsuario( @PathVariable("id") String correo) {
+		usuarioService.eliminarUsuario(correo);
+		return "redirect:/listar_usuario";
 	}
 	
 	// Editar
 	@GetMapping("/editar_usuario/{id}")
-	public String showeditarUsuario(Model model, @PathVariable("id") Integer id) {
-		model.addAttribute("user", usuarioRepository.findById(id).get());
-		return "editar_usuario";
+	public String showeditarUsuario(Model model, @PathVariable("id") String correo) {
+		List<TipoEntity> listaTipo = tipoRepository.findAll();
+		UsuarioEntity usuarioEncontrado = usuarioService.buscarUsuarioPorCorreo(correo);
+		String rutaVista = "/mantener-usuario/actualizar_usuario";
+		
+		if (usuarioEncontrado == null) {
+	        model.addAttribute("errorMessage", "Usuario no encontrado");
+	        return "redirect:/listar_usuario";
+	    }
+		
+		usuarioEncontrado.setPassword("");
+		model.addAttribute("usuario", usuarioEncontrado);
+		model.addAttribute("tiposUsuario", listaTipo);
+		
+		return rutaVista;
 	}
 	
 	@PostMapping("/editar_usuario/{id}")
-	public String editarUsuario(@ModelAttribute UsuarioEntity usuario, Model model, @PathVariable("id") Integer id ) {
+	public String editarUsuario(@ModelAttribute UsuarioEntity usuario, Model model, @PathVariable("id") String correo ) {
 		
-		UsuarioEntity usuarioExistente = usuarioRepository.findById(id).get();
+		UsuarioEntity usuarioExistente = usuarioService.buscarUsuarioPorCorreo(correo);
+		String rutaVista = "/mantener-usuario/actualizar_usuario";
+		UsuarioEntity usuarioEditado = usuario;
+		usuarioEditado.setCorreo(correo);
+	    
+	    if (usuario.getNombre() == null || usuario.getNombre().isEmpty()) {
+	        model.addAttribute("errorMessage", "El nombre y la contraseña no pueden estar vacíos");
+	        model.addAttribute("usuario", usuarioExistente);
+	        model.addAttribute("correo", usuarioExistente.getCorreo());
+	        model.addAttribute("tiposUsuario", tipoRepository.findAll());
+	        return rutaVista;
+	    }
+	    
+    
+		usuarioService.actualizarProducto(usuarioEditado);
 		
-		
-		if(usuario.getNombre() == null && usuario.getPassword() == null) {
-			model.addAttribute("errorMessage", "El usuaro o contraseña no pueden estar vacios");
-			model.addAttribute("user", usuarioExistente);
-			model.addAttribute("id", id);
-			return "editar_usuario";
-		}
-		
-		usuarioExistente.setNombre(usuario.getNombre());
-		usuarioExistente.setPassword(usuario.getPassword());
-		
-		usuarioRepository.save(usuarioExistente);
-		
-		return "redirect:/";
+		return "redirect:/listar_usuario";
 	}
 }
 
