@@ -31,5 +31,7 @@ public class UsuarioEntity {
 	@JoinColumn(name = "tipo_id_tipo", nullable = false)
 	private TipoEntity tipo;
 	
-	private String urlImagen;	
+
+	
+	
 }

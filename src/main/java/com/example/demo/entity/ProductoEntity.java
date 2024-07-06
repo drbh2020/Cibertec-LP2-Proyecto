@@ -34,5 +34,6 @@ public class ProductoEntity {
 	@ManyToOne
 	@JoinColumn(name = "categoria_id", nullable = false)
 	private CategoriaEntity categoriaEntity;
+	private String urlImagen;
 
 }

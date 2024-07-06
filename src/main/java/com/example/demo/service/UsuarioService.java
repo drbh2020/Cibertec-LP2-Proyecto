@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.demo.entity.UsuarioEntity;
 
 public interface UsuarioService {
-	void crearUsuario(UsuarioEntity usuarioEntity, Model model, MultipartFile foto);
+	void crearUsuario(UsuarioEntity usuarioEntity, Model model);
 	boolean validarUsuario(UsuarioEntity usuarioEntity, HttpSession session);
 	UsuarioEntity buscarUsuarioPorCorreo(String correo);
 }

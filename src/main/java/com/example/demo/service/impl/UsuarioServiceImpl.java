@@ -19,9 +19,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 	private UsuarioRepository usuarioRepository;
 	
 	@Override
-	public void crearUsuario(UsuarioEntity usuarioEntity, Model model, MultipartFile foto) {
-		String nombreFoto = Utilitarios.guardarImagen(foto);
-		usuarioEntity.setUrlImagen(nombreFoto);
+	public void crearUsuario(UsuarioEntity usuarioEntity, Model model) {
 		 
 		String passwordHash = Utilitarios.extraerHash(usuarioEntity.getPassword());
 		usuarioEntity.setPassword(passwordHash);
@@ -31,7 +29,6 @@ public class UsuarioServiceImpl implements UsuarioService{
 
 				model.addAttribute("registroCorrecto", "Registro Correcto");
 				model.addAttribute("usuario", new UsuarioEntity());
-		
 	}
 
 	@Override

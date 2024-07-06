@@ -12,3 +12,15 @@ body{
 .d-block{
     height: 10px;
 }
+
+.banner-image {
+    width: 100%; /* Ajusta el ancho al 100% del contenedor */
+    height: auto; /* Permite que la altura se ajuste proporcionalmente */
+    object-fit: cover; /* Ajusta el tamaño de la imagen mientras mantiene su relación de aspecto */
+}
+
+#carouselExampleSlidesOnly {
+    width: 100%; /* Ajusta el ancho según tus necesidades */
+    height: 400px; /* Ajusta la altura según tus necesidades */
+    /* Otros estilos personalizados si los necesitas */
+}
