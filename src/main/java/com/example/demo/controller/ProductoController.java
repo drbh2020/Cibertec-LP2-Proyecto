@@ -196,20 +196,36 @@ public class ProductoController {
 			detallePedidoEntityList.add(detallePedidoEntity);
 			total += pedido.getCantidad() * productoEntity.getPrecio();
 		}
+		
+		String correo = session.getAttribute("usuario").toString();
+		UsuarioEntity usuarioEntity = usuarioService.buscarUsuarioPorCorreo(correo);
+		String nombre = usuarioEntity.getNombre();
+		String apellido = usuarioEntity.getApellidos();
+		
+		String nombreCompletoUsuario = nombre+" "+apellido;
 
 		Map<String, Object>datosPdf = new HashMap<String, Object>();
 		datosPdf.put("factura", detallePedidoEntityList);
 		datosPdf.put("precio_total", total);
+		datosPdf.put("nombreCompletoUsuario", nombreCompletoUsuario);
+		
 
 		ByteArrayInputStream pdfBytes = pdfService.generarPdfDeHtml("template_pdf", datosPdf);
 
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.add("Content-Disposition", "inline; filename=productos.pdf");
 
+		session.removeAttribute("carrito");
+		detallePedidoEntityList.clear();
+		productoSession.clear();
+		
 		return ResponseEntity.ok()
 				.headers(httpHeaders)
 				.contentType(MediaType.APPLICATION_PDF)
 				.body(new InputStreamResource(pdfBytes));
+		
+		
+		
 	}
 	
 	

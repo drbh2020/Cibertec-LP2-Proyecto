@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        header img {
+            height: 50px;
+        }
+        header .company-info {
+            text-align: right;
+        }
+        .date {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #000;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        .subtotal {
+            text-align: right;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .signature {
+            margin-top: 50px;
+            text-align: left;
+        }
+        .signature img {
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <img src="https://campusvirtualperu.com/wp-content/uploads/2023/11/logo_cibertec_fondo_blanco_low.jpg" alt="Company Logo">
+    <div class="company-info">
+        <h2>Boleta Electronica</h2>
+    </div>
+</header>
+
+<div class="date">
+    <p th:text="${#dates.format(new java.util.Date(), 'dd/MM/yyyy')}">19/06/2024</p>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Imagen</th>
+        <th>Nombre</th>
+        <th>Cantidad</th>
+        <th>Precio</th>
+        <th>subtotal</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="ped : ${factura}">
+        <td th:text="${ped.productoEntity.productoId}"></td>
+        <td><img width="50px" height="50px" th:src="${ped.productoEntity.urlImagen}" alt=""></td>
+        <td th:text="${ped.productoEntity.nombre}"></td>
+        <td th:text="${ped.cantidad}"></td>
+        <td th:text="'S/' + ${ped.productoEntity.precio}"></td>
+        <td th:text="'S/' + ${ped.cantidad} * ${ped.productoEntity.precio}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="subtotal">
+    <p>Total: <span th:text="${precio_total}"></span></p>
+</div>
+
+
+<div class="footer">
+    <p th:text="'Boleta a nombre de: ' + ${nombreCompletoUsuario}"></p>
+</div>
+</body>
+</html>
