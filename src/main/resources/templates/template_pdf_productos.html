@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        header img {
+            height: 50px;
+        }
+        header .company-info {
+            text-align: right;
+        }
+        .date {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #000;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <img src="https://campusvirtualperu.com/wp-content/uploads/2023/11/logo_cibertec_fondo_blanco_low.jpg" alt="Company Logo">
+    <div class="company-info">
+        <h2>Lista de Productos</h2>
+    </div>
+</header>
+
+<div class="date">
+    <p th:text="${#dates.format(new java.util.Date(), 'dd/MM/yyyy')}">19/06/2024</p>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Categoría</th>
+        <th>Precio</th>
+        <th>Stock</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="producto : ${productos}">
+        <td th:text="${producto.productoId}"></td>
+        <td th:text="${producto.nombre}"></td>
+        <td th:text="${producto.categoriaEntity.nombre_categoria}"></td>
+        <td th:text="${producto.precio}"></td>
+        <td th:text="${producto.stock}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="footer">
+    <p th:text="'Reporte generado por: ' + ${nombreCompletoUsuario}"></p>
+</div>
+
+</body>
+</html>

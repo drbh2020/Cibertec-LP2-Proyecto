@@ -54,16 +54,37 @@ public class UsuarioController {
     public String login(UsuarioEntity usuarioEntity, Model model, HttpSession session) {
         boolean usuarioValido = usuarioService.validarUsuario(usuarioEntity, session);
         if (usuarioValido) {
-            return "redirect:/menu"; 
+            UsuarioEntity usuarioAutenticado = usuarioService.buscarUsuarioPorCorreo(usuarioEntity.getCorreo());
+            if (usuarioAutenticado != null && usuarioAutenticado.getTipo() != null) {
+                String tipoUsuario = usuarioAutenticado.getTipo().getNombre();
+                if ("Administrador".equals(tipoUsuario)) {
+                    return "redirect:/mantenimientos"; // Redirigir a mantenimientos.html si es administrador
+                }
+                return "redirect:/menu"; // Redirigir a menu.html para otros tipos de usuarios
+            } else {
+                model.addAttribute("loginInvalido", "El usuario no tiene un tipo definido");
+                model.addAttribute("usuario", new UsuarioEntity());
+                return "login"; // Volver a la página de login si el usuario no tiene un tipo definido
+            }
         }
         model.addAttribute("loginInvalido", "No existe el usuario");
-		model.addAttribute("usuario", new UsuarioEntity());
-        return "login"; 
+        model.addAttribute("usuario", new UsuarioEntity());
+        return "login"; // Volver a la página de login si el usuario no es válido
     }
-    
+
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/";
+    }
+    
+    @GetMapping("/mantenimientos")
+    public String ShowMantenimientos(HttpSession session, Model model) {
+    	
+    	if (session.getAttribute("usuario") == null) {
+			return "redirect:/";
+		}
+    	
+        return "mantenimientos"; 
     }
 }

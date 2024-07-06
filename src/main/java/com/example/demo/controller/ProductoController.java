@@ -19,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -48,123 +50,127 @@ public class ProductoController {
 
 	@Autowired
 	private CategoriaRepository categoriaRepository;
-	
+
 	@Autowired
 	private ProductoRepository productoRepository;
-	
+
 	@Autowired
 	private TipoRepository tipoRepository;
 
 	@Autowired
 	private PdfService pdfService;
-	
+
 	@Autowired
 	private UsuarioRepository usuarioRepository;
-	
+
 	@GetMapping("/")
-    public String index(Model model) {
+	public String index(Model model) {
 		model.addAttribute("usuario", new UsuarioEntity());
-        // Crear categorías si no existen
-        List<CategoriaEntity> categorias = categoriaRepository.findAll();
-        if (categorias.isEmpty()) {
-            CategoriaEntity categoriaHombre = new CategoriaEntity(null, "Hombre");
-            CategoriaEntity categoriaNiños = new CategoriaEntity(null, "Niños");
-            CategoriaEntity categoriaMujer = new CategoriaEntity(null, "Mujer");
-            categoriaRepository.saveAll(Arrays.asList(categoriaHombre, categoriaNiños, categoriaMujer));
-            categorias = Arrays.asList(categoriaHombre, categoriaNiños, categoriaMujer);
-        }
-        model.addAttribute("categorias", categorias);
+		// Crear categorías si no existen
+		List<CategoriaEntity> categorias = categoriaRepository.findAll();
+		if (categorias.isEmpty()) {
+			CategoriaEntity categoriaHombre = new CategoriaEntity(null, "Hombre");
+			CategoriaEntity categoriaNiños = new CategoriaEntity(null, "Niños");
+			CategoriaEntity categoriaMujer = new CategoriaEntity(null, "Mujer");
+			categoriaRepository.saveAll(Arrays.asList(categoriaHombre, categoriaNiños, categoriaMujer));
+			categorias = Arrays.asList(categoriaHombre, categoriaNiños, categoriaMujer);
+		}
+		model.addAttribute("categorias", categorias);
 
-        // Crear productos si no existen
-        List<ProductoEntity> productos = productoRepository.findAll();
-        if (productos.isEmpty()) {
-            // Obtener las categorías creadas para asociarlas correctamente
-            CategoriaEntity categoriaHombre = categorias.get(0);
-            CategoriaEntity categoriaNiños = categorias.get(1);
-            CategoriaEntity categoriaMujer = categorias.get(2);
+		// Crear productos si no existen
+		List<ProductoEntity> productos = productoRepository.findAll();
+		if (productos.isEmpty()) {
+			// Obtener las categorías creadas para asociarlas correctamente
+			CategoriaEntity categoriaHombre = categorias.get(0);
+			CategoriaEntity categoriaNiños = categorias.get(1);
+			CategoriaEntity categoriaMujer = categorias.get(2);
 
-            ProductoEntity productoPoloHombre = new ProductoEntity(null, "Polo Básico Hombre", 40.50, 100, categoriaHombre, "https://realplaza.vtexassets.com/arquivos/ids/22654364-800-auto?v=637853060342370000&width=800&height=auto&aspect=true");
-            ProductoEntity productoPoloNiño = new ProductoEntity(null, "Polo Básico Niño", 36.50, 100, categoriaNiños, "https://realplaza.vtexassets.com/arquivos/ids/22654364-800-auto?v=637853060342370000&width=800&height=auto&aspect=true");
-            ProductoEntity productoPoloMujer = new ProductoEntity(null, "Polo Básico Mujer", 52.00, 100, categoriaMujer, "https://realplaza.vtexassets.com/arquivos/ids/22654364-800-auto?v=637853060342370000&width=800&height=auto&aspect=true");
-            
-            productoRepository.saveAll(Arrays.asList(productoPoloHombre, productoPoloNiño, productoPoloMujer));
-            productos = Arrays.asList(productoPoloHombre, productoPoloNiño, productoPoloMujer);
-        }
-        
-        model.addAttribute("productos", productos);
-        
-        List<TipoEntity> tipos = tipoRepository.findAll();
-        if(tipos.isEmpty()) {
-        	TipoEntity tipoAdministrador = new TipoEntity(null, "Administrador");
-        	TipoEntity tipoCliente = new TipoEntity(null, "Cliente");
-        	tipoRepository.saveAll(Arrays.asList(tipoAdministrador,tipoCliente));
-        	tipos =  Arrays.asList(tipoAdministrador, tipoCliente);
-        }
-        
-        model.addAttribute("tipos", tipos);
-        
-        List<UsuarioEntity> usuarios = usuarioRepository.findAll();
-        if (usuarios.isEmpty()) {
-            TipoEntity tipoAdministrador = tipos.get(0);
+			ProductoEntity productoPoloHombre = new ProductoEntity(null, "Polo Básico Hombre", 40.50, 100,
+					categoriaHombre,
+					"https://realplaza.vtexassets.com/arquivos/ids/22654364-800-auto?v=637853060342370000&width=800&height=auto&aspect=true");
+			ProductoEntity productoPoloNiño = new ProductoEntity(null, "Polo Básico Niño", 36.50, 100, categoriaNiños,
+					"https://realplaza.vtexassets.com/arquivos/ids/22654364-800-auto?v=637853060342370000&width=800&height=auto&aspect=true");
+			ProductoEntity productoPoloMujer = new ProductoEntity(null, "Polo Básico Mujer", 52.00, 100, categoriaMujer,
+					"https://realplaza.vtexassets.com/arquivos/ids/22654364-800-auto?v=637853060342370000&width=800&height=auto&aspect=true");
 
-            UsuarioEntity usuarioAdmin = new UsuarioEntity("admin@urbanhop", "123", "Rodrigo", "Pereda", tipoAdministrador);
-            usuarioService.crearUsuario(usuarioAdmin, model);
-            model.addAttribute("registroCorrecto", "Se creó el usuario administrador");
-        }
-        return "home";
-    }
-	
+			productoRepository.saveAll(Arrays.asList(productoPoloHombre, productoPoloNiño, productoPoloMujer));
+			productos = Arrays.asList(productoPoloHombre, productoPoloNiño, productoPoloMujer);
+		}
+
+		model.addAttribute("productos", productos);
+
+		List<TipoEntity> tipos = tipoRepository.findAll();
+		if (tipos.isEmpty()) {
+			TipoEntity tipoAdministrador = new TipoEntity(null, "Administrador");
+			TipoEntity tipoCliente = new TipoEntity(null, "Cliente");
+			tipoRepository.saveAll(Arrays.asList(tipoAdministrador, tipoCliente));
+			tipos = Arrays.asList(tipoAdministrador, tipoCliente);
+		}
+
+		model.addAttribute("tipos", tipos);
+
+		List<UsuarioEntity> usuarios = usuarioRepository.findAll();
+		if (usuarios.isEmpty()) {
+			TipoEntity tipoAdministrador = tipos.get(0);
+
+			UsuarioEntity usuarioAdmin = new UsuarioEntity("admin@urbanhop", "123", "Rodrigo", "Pereda",
+					tipoAdministrador);
+			usuarioService.crearUsuario(usuarioAdmin, model);
+			model.addAttribute("registroCorrecto", "Se creó el usuario administrador");
+		}
+		return "home";
+	}
+
 	@GetMapping("/menu")
 	public String showMenu(HttpSession session, Model model) {
-	    if(session.getAttribute("usuario") == null) {
-	        return "redirect:/";
-	    }
+		if (session.getAttribute("usuario") == null) {
+			return "redirect:/";
+		}
 
-	    String correo = session.getAttribute("usuario").toString();
-	    UsuarioEntity usuarioEntity = usuarioService.buscarUsuarioPorCorreo(correo);
-	    
-	    List<CategoriaEntity> categorias = categoriaRepository.findAll();
-	    model.addAttribute("categorias", categorias);
-	    // Obtener y agregar productos al modelo
-	    List<ProductoEntity> productos = productoRepository.findAll();
-	    
+		String correo = session.getAttribute("usuario").toString();
+		UsuarioEntity usuarioEntity = usuarioService.buscarUsuarioPorCorreo(correo);
 
-	    model.addAttribute("productos", productos);
+		List<CategoriaEntity> categorias = categoriaRepository.findAll();
+		model.addAttribute("categorias", categorias);
+		// Obtener y agregar productos al modelo
+		List<ProductoEntity> productos = productoRepository.findAll();
 
-	    List<Pedido> productoSession = null;
-	    if(session.getAttribute("carrito") == null) {
-	        productoSession = new ArrayList<Pedido>();
-	    } else {
-	        productoSession = (List<Pedido>) session.getAttribute("carrito");
-	    }
-	    model.addAttribute("cant_carrito", productoSession.size());
+		model.addAttribute("productos", productos);
 
-	    // ver carrito con datos
-	    List<DetallePedidoEntity> detallePedidoEntityList = new ArrayList<DetallePedidoEntity>();
-	    Double total = 0.0;
+		List<Pedido> productoSession = null;
+		if (session.getAttribute("carrito") == null) {
+			productoSession = new ArrayList<Pedido>();
+		} else {
+			productoSession = (List<Pedido>) session.getAttribute("carrito");
+		}
+		model.addAttribute("cant_carrito", productoSession.size());
 
-	    for(Pedido pedido: productoSession) {
-	        DetallePedidoEntity detallePedidoEntity = new DetallePedidoEntity();
-	        ProductoEntity productoEntity = productoService.buscarProductoPorId(pedido.getProductoId());
-	        detallePedidoEntity.setProductoEntity(productoEntity);
-	        detallePedidoEntity.setCantidad(pedido.getCantidad());
-	        detallePedidoEntityList.add(detallePedidoEntity);
-	        total += pedido.getCantidad() * productoEntity.getPrecio();
-	    }
-	    model.addAttribute("carrito", detallePedidoEntityList);
-	    model.addAttribute("total", total);
+		// ver carrito con datos
+		List<DetallePedidoEntity> detallePedidoEntityList = new ArrayList<DetallePedidoEntity>();
+		Double total = 0.0;
 
-	    return "menu";
+		for (Pedido pedido : productoSession) {
+			DetallePedidoEntity detallePedidoEntity = new DetallePedidoEntity();
+			ProductoEntity productoEntity = productoService.buscarProductoPorId(pedido.getProductoId());
+			detallePedidoEntity.setProductoEntity(productoEntity);
+			detallePedidoEntity.setCantidad(pedido.getCantidad());
+			detallePedidoEntityList.add(detallePedidoEntity);
+			total += pedido.getCantidad() * productoEntity.getPrecio();
+		}
+		model.addAttribute("carrito", detallePedidoEntityList);
+		model.addAttribute("total", total);
+
+		return "menu";
 	}
-	
+
 	@PostMapping("/agregar_producto")
-	public String agregarProducto(HttpSession session,@RequestParam("prodId") String prod,
+	public String agregarProducto(HttpSession session, @RequestParam("prodId") String prod,
 			@RequestParam("cant") String cant) {
 
 		List<Pedido> productos = null;
-		if(session.getAttribute("carrito") == null) {
+		if (session.getAttribute("carrito") == null) {
 			productos = new ArrayList<>();
-		}else {
+		} else {
 			productos = (List<Pedido>) session.getAttribute("carrito");
 		}
 
@@ -176,19 +182,19 @@ public class ProductoController {
 		return "redirect:/menu";
 
 	}
-	
+
 	@GetMapping("/generar_pdf")
-	public ResponseEntity<InputStreamResource>generarPdf(HttpSession session) throws IOException{
-		List<Pedido>productoSession = null;
-		if(session.getAttribute("carrito") == null) {
+	public ResponseEntity<InputStreamResource> generarPdf(HttpSession session) throws IOException {
+		List<Pedido> productoSession = null;
+		if (session.getAttribute("carrito") == null) {
 			productoSession = new ArrayList<Pedido>();
-		}else {
+		} else {
 			productoSession = (List<Pedido>) session.getAttribute("carrito");
 		}
 		List<DetallePedidoEntity> detallePedidoEntityList = new ArrayList<DetallePedidoEntity>();
 		Double total = 0.0;
 
-		for(Pedido pedido: productoSession) {
+		for (Pedido pedido : productoSession) {
 			DetallePedidoEntity detallePedidoEntity = new DetallePedidoEntity();
 			ProductoEntity productoEntity = productoService.buscarProductoPorId(pedido.getProductoId());
 			detallePedidoEntity.setProductoEntity(productoEntity);
@@ -196,19 +202,18 @@ public class ProductoController {
 			detallePedidoEntityList.add(detallePedidoEntity);
 			total += pedido.getCantidad() * productoEntity.getPrecio();
 		}
-		
+
 		String correo = session.getAttribute("usuario").toString();
 		UsuarioEntity usuarioEntity = usuarioService.buscarUsuarioPorCorreo(correo);
 		String nombre = usuarioEntity.getNombre();
 		String apellido = usuarioEntity.getApellidos();
-		
-		String nombreCompletoUsuario = nombre+" "+apellido;
 
-		Map<String, Object>datosPdf = new HashMap<String, Object>();
+		String nombreCompletoUsuario = nombre + " " + apellido;
+
+		Map<String, Object> datosPdf = new HashMap<String, Object>();
 		datosPdf.put("factura", detallePedidoEntityList);
 		datosPdf.put("precio_total", total);
 		datosPdf.put("nombreCompletoUsuario", nombreCompletoUsuario);
-		
 
 		ByteArrayInputStream pdfBytes = pdfService.generarPdfDeHtml("template_pdf", datosPdf);
 
@@ -218,16 +223,130 @@ public class ProductoController {
 		session.removeAttribute("carrito");
 		detallePedidoEntityList.clear();
 		productoSession.clear();
-		
-		return ResponseEntity.ok()
-				.headers(httpHeaders)
-				.contentType(MediaType.APPLICATION_PDF)
+
+		return ResponseEntity.ok().headers(httpHeaders).contentType(MediaType.APPLICATION_PDF)
 				.body(new InputStreamResource(pdfBytes));
-		
-		
-		
+
 	}
 	
+	@GetMapping("/mantenimiento_producto")
+	public String showMantenimientoProducto(HttpSession session, Model model) {
+		if (session.getAttribute("usuario") == null) {
+			return "redirect:/";
+		}
+
+		String correo = session.getAttribute("usuario").toString();
+		UsuarioEntity usuarioEntity = usuarioService.buscarUsuarioPorCorreo(correo);
+		model.addAttribute("nombre", usuarioEntity.getNombre());
+		model.addAttribute("apellidos", usuarioEntity.getApellidos());
+
+		List<ProductoEntity> productos = productoService.buscarTodosProductos();
+		model.addAttribute("productos", productos);
+
+		return "mantenimiento_producto";
+	}
 	
+	@GetMapping("/nuevo_producto")
+	public String showRegistrarProducto(HttpSession session, Model model) {
+
+		String correo = session.getAttribute("usuario").toString();
+		UsuarioEntity usuarioEntity = usuarioService.buscarUsuarioPorCorreo(correo);
+		model.addAttribute("nombre", usuarioEntity.getNombre());
+		model.addAttribute("apellidos", usuarioEntity.getApellidos());
+
+		model.addAttribute("producto", new ProductoEntity());
+		List<CategoriaEntity> categorias = categoriaRepository.findAll();
+		model.addAttribute("categorias", categorias);
+		return "registrar_producto";
+	}
 	
+	@PostMapping("/nuevo_producto")
+	public String registrarProducto(@ModelAttribute ProductoEntity producto, Model model) {
+		CategoriaEntity categoria = categoriaRepository.findById(producto.getCategoriaEntity().getCategoria_id())
+				.orElseThrow(() -> new IllegalArgumentException("Categoría no válida"));
+		producto.setCategoriaEntity(categoria);
+		productoService.save(producto);
+		return "redirect:/mantenimiento_producto";
+	}
+	
+	@GetMapping("/detalle_producto/{id}")
+	public String verProducto(HttpSession session, Model model, @PathVariable("id") Long id) {
+		
+		String correo = session.getAttribute("usuario").toString();
+		UsuarioEntity usuarioEntity = usuarioService.buscarUsuarioPorCorreo(correo);
+		model.addAttribute("nombre", usuarioEntity.getNombre());
+		model.addAttribute("apellidos", usuarioEntity.getApellidos());
+		
+	    ProductoEntity productoEncontrado = productoService.buscarProductoPorId(id);
+	    model.addAttribute("producto", productoEncontrado);
+	    return "detalle_producto";
+	}
+	
+	@GetMapping("/eliminar_producto/{id}")
+	public String eliminarProducto(@PathVariable("id") Long id) {
+	    productoRepository.deleteById(id);
+	    return "redirect:/mantenimiento_producto";
+	}
+	
+	@GetMapping("/editar_producto/{id}")
+    public String mostrarFormularioEditar(HttpSession session, @PathVariable("id") Long id, Model model) {
+
+		String correo = session.getAttribute("usuario").toString();
+		UsuarioEntity usuarioEntity = usuarioService.buscarUsuarioPorCorreo(correo);
+		model.addAttribute("nombre", usuarioEntity.getNombre());
+		model.addAttribute("apellidos", usuarioEntity.getApellidos());
+		
+		ProductoEntity producto = productoService.buscarProductoPorId(id);
+		List<CategoriaEntity> categorias = categoriaRepository.findAll();
+        model.addAttribute("producto", producto);
+        model.addAttribute("categorias", categorias);
+        return "editar_producto";
+    }
+
+    @PostMapping("/actualizar_producto")
+    public String actualizarProducto(@ModelAttribute("producto") ProductoEntity producto, Model model) {
+        try {
+            productoService.save(producto);
+            return "redirect:/mantenimiento_producto";
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("errorMessage", "Error al actualizar el producto: " + e.getMessage());
+            model.addAttribute("producto", producto);
+            return "editar_producto";
+        }
+    }
+    
+    @GetMapping("/productos/generar_pdf")
+    public ResponseEntity<InputStreamResource> generarPdf(HttpSession session, Model model) throws IOException {
+
+		String correo = session.getAttribute("usuario").toString();
+		UsuarioEntity usuarioEntity = usuarioService.buscarUsuarioPorCorreo(correo);
+		model.addAttribute("nombre", usuarioEntity.getNombre());
+		model.addAttribute("apellidos", usuarioEntity.getApellidos());
+		
+		String nombre = usuarioEntity.getNombre();
+		String apellido = usuarioEntity.getApellidos();
+		
+		String nombreCompletoUsuario = nombre+" "+apellido;
+		
+    	List<ProductoEntity> productos = productoService.buscarTodosProductos();
+        
+        
+        Map<String, Object> datosPdf = Map.of(
+            "productos", productos,
+            "nombreCompletoUsuario", nombreCompletoUsuario
+            
+        );
+
+        ByteArrayInputStream pdfBytes = pdfService.generarPdfDeHtml("template_pdf_productos", datosPdf);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Content-Disposition", "inline; filename=productos.pdf");
+
+        return ResponseEntity.ok()
+                .headers(httpHeaders)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(pdfBytes));
+    }
+
 }
